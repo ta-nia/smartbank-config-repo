@@ -21,6 +21,24 @@ spring:
 jwt:
   secret: smartbank-super-secret-key-must-be-at-least-256-bits-long-for-HS256
 
+resilience4j:
+  circuitbreaker:
+    instances:
+      onboarding-cb:
+        # Open circuit after 50% failure rate
+        failureRateThreshold: 50
+        # Minimum 5 calls before calculating failure rate
+        minimumNumberOfCalls: 5
+        # Stay open for 10 seconds then try again
+        waitDurationInOpenState: 10s
+        # Allow 2 test calls in half-open state
+        permittedNumberOfCallsInHalfOpenState: 2
+      kyc-cb:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 2
+
 eureka:
   client:
     service-url:
